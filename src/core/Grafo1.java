@@ -504,7 +504,7 @@ public class Grafo1 {
 
     public static void testeMenorCaminhoGAO() {
         Grafo1 g = new Grafo1();
-        g.load("g4.txt");
+        g.load("g5.txt");
         g.mostraGrafo1(g.wg, "grafo de entrada");
         g.menorCaminhooGAO(g.wg, "A");
     }
