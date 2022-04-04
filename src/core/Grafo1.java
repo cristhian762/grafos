@@ -57,13 +57,13 @@ public class Grafo1 {
         int wei;
         int i;
         try {
-            /* obtem os v�rtices primeiro */
+            /* obtem os vértices primeiro */
 
             buffread = new BufferedReader(new FileReader(graphFile));
             i = 0;
             boolean eof = false;
             int vdest;
-            /* obtem os v�rtices primeiro */
+            /* obtem os vértices primeiro */
             linha = buffread.readLine();
             vertices = Arrays.asList(linha.split("\\s* \\s*"));
             for (String v : vertices) {
@@ -112,7 +112,7 @@ public class Grafo1 {
 	}	
 }
      */
-    public void mostraGrafo1(DirectedSparseMultigraph g) {
+    public void mostraGrafo1(DirectedSparseMultigraph g, String nomedoGrafo) {
         // SimpleGraphView2 sgv = new SimpleGraphView2(); // This builds the graph
         // Layout<V, E>, VisualizationComponent<V,E>
         Layout<Integer, String> layout = new CircleLayout(g);
@@ -140,7 +140,7 @@ public class Grafo1 {
         //vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 
-        JFrame frame = new JFrame("Visualiza��o de um Grafo Ponderado");
+        JFrame frame = new JFrame(nomedoGrafo);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
@@ -149,7 +149,7 @@ public class Grafo1 {
     }
 
     /*
- * Esta visualiza��o ignora os pesos do grafo	
+ * Esta visualização ignora os pesos do grafo	
      */
     public void mostraGrafo2(DirectedGraph<String, EdgeType> g) {
         // SimpleGraphView2 sgv = new SimpleGraphView2(); // This builds the graph
@@ -178,7 +178,7 @@ public class Grafo1 {
         // vv.getRenderContext().getEdgeIncludePredicate();
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 
-        JFrame frame = new JFrame("Grafo de Depend�ncia do Caminho");
+        JFrame frame = new JFrame("Grafo de Dependência do Caminho");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
@@ -188,13 +188,13 @@ public class Grafo1 {
 
     class VData {
 
-        int cor, /* flag usado no algoritmo para cada v�rtice*/
-                td, /* tempo de descoberta do v�rtice */
+        int cor, /* flag usado no algoritmo para cada vértice*/
+                td, /* tempo de descoberta do vértice */
                 tt;
-        /* tempo de termino do v�rtice */
+        /* tempo de termino do vértice */
 
         String pred;
-        /* predecessor/antecessor do v�rtice na busca tanto no DFS quanto no BFS*/
+        /* predecessor/antecessor do vértice na busca tanto no DFS quanto no BFS*/
         float dist;
 
     }
@@ -206,23 +206,23 @@ public class Grafo1 {
 
     public void DFS(DirectedGraph<String, EdgeType> g) {
         HashMap<String, VData> dVertices = new HashMap<String, VData>();
-        /* inicializando os dados dos v�rtices */
+        /* inicializando os dados dos vértices */
         tempo = 0;
         for (String u : g.getVertices()) {
             VData vd = new VData();
-            vd.cor = 0; // 0 � branco
+            vd.cor = 0; // 0 é branco
             vd.pred = null;
             dVertices.put(u, vd);
         }
         for (String u : g.getVertices()) {
-            if (dVertices.get(u).cor == 0) {// verifico se a cor � branca
+            if (dVertices.get(u).cor == 0) {// verifico se a cor é branca
                 visita(g, dVertices, u);
             }
         }
 
-        /* a partir daqui o c�digo cria um grafo a partir do resultado do DFS */
+        /* a partir daqui o código cria um grafo a partir do resultado do DFS */
  /*
-	    * Adiciono os v�rtices
+	    * Adiciono os vértices
          */
         DirectedGraph<String, EdgeType> gDFS = new DirectedSparseMultigraph<String, EdgeType>();
         for (String u : g.getVertices()) {
@@ -248,7 +248,7 @@ public class Grafo1 {
         this.mostraGrafo2(gDFS);
     }
 
-    /* m�todo visita do DFS
+    /* método visita do DFS
      *  
      */
     private void visita(DirectedGraph<String, EdgeType> g, HashMap<String, VData> dVertices, String u) {
@@ -260,14 +260,82 @@ public class Grafo1 {
         ud.td = tempo;
         for (String v : g.getNeighbors(u)) { // pega lista de adjacentes de u
             VData vd = dVertices.get(v);
-            if (vd.cor == 0) {// se a cor do adjacente � branco
+            if (vd.cor == 0) {// se a cor do adjacente é branco
                 vd.pred = u;
                 visita(g, dVertices, v);
             }
         }
-        ud.cor = 2; // pinta a cor do v�rtice visitado de preto quando termino seus adjacentes
+        ud.cor = 2; // pinta a cor do vértice visitado de preto quando termino seus adjacentes
         tempo++; // incremento mais uma vez o tempo
         ud.tt = tempo; // atribuo o tempo de termino para u
+
+    }
+
+    public List<String> obtemLOT(DirectedGraph<String, EdgeType> g) {
+        LinkedList<String> lot = new LinkedList<String>();
+        HashMap<String, VData> dVertices = new HashMap<String, VData>();
+        /* inicializando os dados dos vértices */
+        tempo = 0;
+        for (String u : g.getVertices()) {
+            VData vd = new VData();
+            vd.cor = 0; // 0 é branco
+            vd.pred = null;
+            dVertices.put(u, vd);
+        }
+        for (String u : g.getVertices()) {
+            if (dVertices.get(u).cor == 0) {// verifico se a cor é branca
+                visita(g, dVertices, u, lot);
+            }
+        }
+
+        /* a partir daqui o código cria um grafo a partir do resultado do DFS */
+ /*
+		    * Adiciono os vértices
+         */
+        DirectedSparseMultigraph<String, EdgeType> gDFS = new DirectedSparseMultigraph<String, EdgeType>();
+        for (String u : g.getVertices()) {
+            printVData(dVertices.get(u));
+            gDFS.addVertex(u);
+
+        }
+        /*
+	 * adiciono as arestas 	    
+         */
+        for (String u : g.getVertices()) {
+            String v = dVertices.get(u).pred;
+            if (v != null) {
+                EdgeType e = new EdgeType(1);
+                gDFS.addEdge(e, v, u);
+
+            }
+        }
+
+        /*
+		   * chama o mostra grafo 2 para exibir o grafo gerado pelo conjunto de antecessores gerado pel DFS 
+         */
+        this.mostraGrafo1(gDFS, "grafo da LOT");
+        return lot;
+    }
+
+    private void visita(DirectedGraph<String, EdgeType> g, HashMap<String, VData> dVertices, String u, LinkedList<String> lot) {
+        // TODO Auto-generated method stub
+
+        VData ud = dVertices.get(u);
+        ud.cor = 1; //cinza
+        tempo++;
+        ud.td = tempo;
+        for (String v : g.getNeighbors(u)) { // pega lista de adjacentes de u
+            VData vd = dVertices.get(v);
+            if (vd.cor == 0) {// se a cor do adjacente é branco
+                vd.pred = u;
+                visita(g, dVertices, v, lot);
+            }
+        }
+        ud.cor = 2; // pinta a cor do vértice visitado de preto quando termino seus adjacentes
+        tempo++; // incremento mais uma vez o tempo
+        ud.tt = tempo; // atribuo o tempo de termino para u
+        lot.addFirst(u);
+
     }
 
     /*
@@ -278,7 +346,7 @@ public class Grafo1 {
 		//g.mostraGrafo1(g.wg);
 		//g.DFS(g.wg);
 		
-		//Teste que usa o m�todo BFS
+		//Teste que usa o método BFS
 				Grafo1 g2 = new Grafo1();
 				g2.load("g1.txt");
 				g2.mostraGrafo1(g2.wg);
@@ -287,6 +355,7 @@ public class Grafo1 {
 
 	}
      */
+
     public void BFS(DirectedGraph<String, EdgeType> g) {
         HashMap<String, VData> dVertices = new HashMap<>();
         for (String u : g.getVertices()) {
@@ -350,15 +419,15 @@ public class Grafo1 {
 
     public static void testeMenorCaminho() {
         Grafo1 g = new Grafo1();
-        g.load("g2.txt");
-        g.mostraGrafo1(g.wg);
-        g.menorCaminhoorigemunica(g.wg, "A");
+        g.load("g4.txt");
+        g.mostraGrafo1(g.wg, "resultado Belman-ford");
+        g.menorCaminhoorigemÚnica(g.wg, "A");
     }
 
-    public void menorCaminhoorigemunica(DirectedGraph<String, EdgeType> g, String s) {
+    public void menorCaminhoorigemÚnica(DirectedGraph<String, EdgeType> g, String s) {
 
         HashMap<String, VData> dVertices = new HashMap<>();
-        /* inicializa��o de vari�veis na estrutura VData */
+        /* inicialização de variáveis na estrutura VData */
         for (String u : g.getVertices()) {
             VData vd = new VData();
             vd.pred = null;
@@ -385,8 +454,59 @@ public class Grafo1 {
             }
         }
 
-        this.mostraGrafo1(gMC);
+        this.mostraGrafo1(gMC, "Resultado Belman-Ford");
 
+    }
+
+    public void menorCaminhooGAO(DirectedGraph<String, EdgeType> g, String s) {
+
+        List<String> lot = this.obtemLOT(g);
+        HashMap<String, VData> dVertices = new HashMap<>();
+        /* inicialização de variáveis na estrutura VData */
+        for (String u : g.getVertices()) {
+            VData vd = new VData();
+            vd.pred = null;
+            vd.dist = this.inf;
+            dVertices.put(u, vd);
+
+        }
+        VData inicio = dVertices.get(s);
+        inicio.dist = 0;
+        for (String u : lot) {
+            for (String v : g.getNeighbors(u)) {
+                EdgeType e = g.findEdge(u, v);
+                if (e != null) {
+                    relax(u, v, g.findEdge(u, v).weight, dVertices);
+                }
+            }
+        }
+
+        //bellman_ford(g,dVertices);
+        /* apresentando os resultados */
+        DirectedSparseMultigraph<String, EdgeType> gMC = new DirectedSparseMultigraph<String, EdgeType>();
+        for (String u : g.getVertices()) {
+            printVData(dVertices.get(u));
+            gMC.addVertex(u);
+        }
+
+        for (String u : g.getVertices()) {
+            String v = dVertices.get(u).pred;
+            if (v != null) {
+
+                EdgeType e = new EdgeType(this.wg.findEdge(v, u).weight, String.valueOf(gMC.getEdgeCount()));
+                gMC.addEdge(e, v, u);
+            }
+        }
+
+        this.mostraGrafo1(gMC, "resultado menorCaminho GAO");
+
+    }
+
+    public static void testeMenorCaminhoGAO() {
+        Grafo1 g = new Grafo1();
+        g.load("g4.txt");
+        g.mostraGrafo1(g.wg, "grafo de entrada");
+        g.menorCaminhooGAO(g.wg, "A");
     }
 
     public void relax(String u, String v, float w, HashMap<String, VData> dVertices) {
@@ -413,7 +533,7 @@ public class Grafo1 {
 
     public static void main(String[] args) {
         //testeBFS();
-        testeMenorCaminho();
+        testeMenorCaminhoGAO();
     }
 
 }
