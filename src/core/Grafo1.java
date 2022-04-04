@@ -421,10 +421,10 @@ public class Grafo1 {
         Grafo1 g = new Grafo1();
         g.load("g4.txt");
         g.mostraGrafo1(g.wg, "resultado Belman-ford");
-        g.menorCaminhoorigemÚnica(g.wg, "A");
+        g.menorCaminhoorigemUnica(g.wg, "A");
     }
 
-    public void menorCaminhoorigemÚnica(DirectedGraph<String, EdgeType> g, String s) {
+    public void menorCaminhoorigemUnica(DirectedGraph<String, EdgeType> g, String s) {
 
         HashMap<String, VData> dVertices = new HashMap<>();
         /* inicialização de variáveis na estrutura VData */
