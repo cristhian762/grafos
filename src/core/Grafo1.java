@@ -438,6 +438,7 @@ public class Grafo1 {
         VData inicio = dVertices.get(s);
         inicio.dist = 0;
         bellman_ford(g, dVertices);
+        
         /* apresentando os resultados */
         DirectedSparseMultigraph<String, EdgeType> gMC = new DirectedSparseMultigraph<String, EdgeType>();
         for (String u : g.getVertices()) {
@@ -470,6 +471,7 @@ public class Grafo1 {
             dVertices.put(u, vd);
 
         }
+        
         VData inicio = dVertices.get(s);
         inicio.dist = 0;
         for (String u : lot) {
@@ -530,10 +532,54 @@ public class Grafo1 {
         }
         return false;
     }
+    
+    public void dijkstra(DirectedGraph<String, EdgeType> g){
+        
+        HashMap<String, VData> dVertices = new HashMap<>();
+        Queue<String> q = new LinkedList<>();
 
-    public static void main(String[] args) {
-        //testeBFS();
-        testeMenorCaminhoGAO();
+        for (String u : g.getVertices()) {
+            VData vd = new VData();
+            vd.cor = 0;
+            vd.pred = null;
+            dVertices.put(u, vd);
+            q.add(u);
+        }
+        
+        VData inicio = dVertices.get("A");
+        inicio.cor = 1;
+
+
+        while (!q.isEmpty()) {
+            String u = q.remove();
+            for (String v : q) {
+                relax(u, v, g.findEdge(u, v).weight, dVertices);    
+            }
+        }
+        
+        /* apresentando os resultados */
+        DirectedSparseMultigraph<String, EdgeType> gMC = new DirectedSparseMultigraph<String, EdgeType>();
+        for (String u : g.getVertices()) {
+            printVData(dVertices.get(u));
+            gMC.addVertex(u);
+        }
+
+        for (String u : g.getVertices()) {
+            String v = dVertices.get(u).pred;
+            if (v != null) {
+
+                EdgeType e = new EdgeType(this.wg.findEdge(v, u).weight, String.valueOf(gMC.getEdgeCount()));
+                gMC.addEdge(e, v, u);
+            }
+        }
+
+        this.mostraGrafo1(gMC, "Resultado Belman-Ford");
     }
-
+    
+    public void testaDijkstra(){
+        Grafo1 g = new Grafo1();
+        g.load("g7.txt");
+        g.mostraGrafo1(g.wg, "grafo de entrada");
+        g.dijkstra(g.wg);
+    }
 }
