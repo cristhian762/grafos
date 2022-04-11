@@ -540,14 +540,13 @@ public class Grafo1 {
 
         for (String u : g.getVertices()) {
             VData vd = new VData();
-            vd.cor = 0;
             vd.pred = null;
+            vd.dist = this.inf;
             dVertices.put(u, vd);
-            q.add(u);
         }
         
         VData inicio = dVertices.get("A");
-        inicio.cor = 1;
+        inicio.dist = 0;
 
         System.out.println(q);
 
