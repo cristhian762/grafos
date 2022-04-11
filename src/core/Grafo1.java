@@ -549,11 +549,16 @@ public class Grafo1 {
         VData inicio = dVertices.get("A");
         inicio.cor = 1;
 
+        System.out.println(q);
 
         while (!q.isEmpty()) {
             String u = q.remove();
             for (String v : q) {
-                relax(u, v, g.findEdge(u, v).weight, dVertices);    
+                EdgeType e = g.findEdge(u, v);
+                if (e != null) {
+                    System.out.printf("%s %s %f \n", u, v, g.findEdge(u, v).weight);
+                    relax(u, v, g.findEdge(u, v).weight, dVertices);
+                }
             }
         }
         
