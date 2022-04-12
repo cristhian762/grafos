@@ -41,7 +41,7 @@ public class Grafo1 {
     public void setWg(DirectedSparseMultigraph<String, EdgeType> wg) {
         this.wg = wg;
     }
-    private DirectedSparseMultigraph<String, EdgeType> wg;
+    DirectedSparseMultigraph<String, EdgeType> wg;
 
     /**
      *
@@ -355,7 +355,6 @@ public class Grafo1 {
 
 	}
      */
-
     public void BFS(DirectedGraph<String, EdgeType> g) {
         HashMap<String, VData> dVertices = new HashMap<>();
         for (String u : g.getVertices()) {
@@ -410,20 +409,6 @@ public class Grafo1 {
         dVertices.get(u).cor = 2;
     }
 
-    public static void testeBFS() {
-        Grafo1 g = new Grafo1();
-        g.load("g2.txt");
-        g.mostraGrafo2(g.wg);
-        g.BFS(g.wg);
-    }
-
-    public static void testeMenorCaminho() {
-        Grafo1 g = new Grafo1();
-        g.load("g4.txt");
-        g.mostraGrafo1(g.wg, "resultado Belman-ford");
-        g.menorCaminhoorigemUnica(g.wg, "A");
-    }
-
     public void menorCaminhoorigemUnica(DirectedGraph<String, EdgeType> g, String s) {
 
         HashMap<String, VData> dVertices = new HashMap<>();
@@ -435,10 +420,11 @@ public class Grafo1 {
             dVertices.put(u, vd);
 
         }
+
         VData inicio = dVertices.get(s);
         inicio.dist = 0;
         bellman_ford(g, dVertices);
-        
+
         /* apresentando os resultados */
         DirectedSparseMultigraph<String, EdgeType> gMC = new DirectedSparseMultigraph<String, EdgeType>();
         for (String u : g.getVertices()) {
@@ -471,7 +457,7 @@ public class Grafo1 {
             dVertices.put(u, vd);
 
         }
-        
+
         VData inicio = dVertices.get(s);
         inicio.dist = 0;
         for (String u : lot) {
@@ -504,13 +490,6 @@ public class Grafo1 {
 
     }
 
-    public static void testeMenorCaminhoGAO() {
-        Grafo1 g = new Grafo1();
-        g.load("g5.txt");
-        g.mostraGrafo1(g.wg, "grafo de entrada");
-        g.menorCaminhooGAO(g.wg, "A");
-    }
-
     public void relax(String u, String v, float w, HashMap<String, VData> dVertices) {
         if (dVertices.get(v).dist > dVertices.get(u).dist + w) {
             dVertices.get(v).dist = dVertices.get(u).dist + w;
@@ -532,9 +511,9 @@ public class Grafo1 {
         }
         return false;
     }
-    
-    public void dijkstra(DirectedGraph<String, EdgeType> g){
-        
+
+    public void dijkstra(DirectedGraph<String, EdgeType> g, String s) {
+
         HashMap<String, VData> dVertices = new HashMap<>();
         Queue<String> q = new LinkedList<>();
 
@@ -543,24 +522,22 @@ public class Grafo1 {
             vd.pred = null;
             vd.dist = this.inf;
             dVertices.put(u, vd);
+            q.add(u);
         }
-        
-        VData inicio = dVertices.get("A");
-        inicio.dist = 0;
 
-        System.out.println(q);
+        VData inicio = dVertices.get(s);
+        inicio.dist = 0;
 
         while (!q.isEmpty()) {
             String u = q.remove();
-            for (String v : q) {
+            for (String v : g.getNeighbors(u)) {
                 EdgeType e = g.findEdge(u, v);
                 if (e != null) {
-                    System.out.printf("%s %s %f \n", u, v, g.findEdge(u, v).weight);
                     relax(u, v, g.findEdge(u, v).weight, dVertices);
                 }
             }
         }
-        
+
         /* apresentando os resultados */
         DirectedSparseMultigraph<String, EdgeType> gMC = new DirectedSparseMultigraph<String, EdgeType>();
         for (String u : g.getVertices()) {
@@ -577,13 +554,34 @@ public class Grafo1 {
             }
         }
 
-        this.mostraGrafo1(gMC, "Resultado Belman-Ford");
+        this.mostraGrafo1(gMC, "Resultado Dijkstra");
     }
-    
-    public void testaDijkstra(){
+
+    public static void testaDijkstra() {
         Grafo1 g = new Grafo1();
         g.load("g7.txt");
-        g.mostraGrafo1(g.wg, "grafo de entrada");
-        g.dijkstra(g.wg);
+        g.mostraGrafo1(g.wg, "Grafo de entrada");
+        g.dijkstra(g.wg, "A");
+    }
+
+    public static void testeMenorCaminhoGAO() {
+        Grafo1 g = new Grafo1();
+        g.load("g5.txt");
+        g.mostraGrafo1(g.wg, "Grafo de entrada");
+        g.menorCaminhooGAO(g.wg, "A");
+    }
+
+    public static void testeBFS() {
+        Grafo1 g = new Grafo1();
+        g.load("g2.txt");
+        g.mostraGrafo2(g.wg);
+        g.BFS(g.wg);
+    }
+
+    public static void testeMenorCaminho() {
+        Grafo1 g = new Grafo1();
+        g.load("g7.txt");
+        g.mostraGrafo1(g.wg, "resultado Belman-ford");
+        g.menorCaminhoorigemUnica(g.wg, "A");
     }
 }
