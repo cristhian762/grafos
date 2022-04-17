@@ -5,85 +5,85 @@
  */
 package core;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
+import java.util.ArrayList;
 
 /**
  *
- * @author 20191bsi0077
+ * @author 20191BSI0077
  */
 public class ManipulationFile {
 
-	private int lastNumber;
-	private final java.io.File file = new java.io.File("data.txt");
+    private final java.io.File file = new java.io.File("data.txt");
 
-	public ManipulationFile() {
+    public void generateFork(int order) {
+        Random random = new Random();
+        String line = "";
 
-		if (!file.exists()) {
-			creatFileData(999990101);
-		}
+        boolean statusFile = false;
+        
+        file.delete();
 
-		readFileData();
-	}
+        try {
+            statusFile = file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	private void creatFileData(int number) {
-		boolean statusFile = false;
+        if (statusFile) {
+            try {
+                FileWriter fileWriter = new FileWriter(file, false);
 
-		try {
-			statusFile = file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+                try ( PrintWriter printWriter = new PrintWriter(fileWriter)) {
+                    int k = 0, s = 0, t = 0;
+                    char c = 'a', d = 'a', e = 'a';
+                    
+                    while (k < order){
+                        s = 0;
+                        while(k < order && s < 26){
+                            t = 0;
+                            while(k < order && t < 26){
+                                line = Character.toString(Character.toUpperCase(c)) + Character.toString(Character.toUpperCase(d)) +  Character.toString(Character.toUpperCase(e)) + " ";
+                                System.out.println(line);
+                                
+                                t++;
+                                e++;
+                                k++;
+                            }
+                            d++;
+                            k++;
+                            s++;
+                            e = 'a';
+                        }
+                        c++;
+                        d = 'a';
+                        k++;
+                    }
 
-		if (statusFile) {
-			try {
-				FileWriter fileWriter = new FileWriter(file, false);
+                    for (int i = 0; i < order; i++) {
+                        line = "";
+                        for (int j = 0; j < order; j++) {
+                            if (random.nextBoolean()) {
+                                line += Integer.toString(random.nextInt(1, 10)) + " ";
+                            } else {
+                                line += "0 ";
+                            }
+                        }
+                        printWriter.print(line + "\n");
+                    }
 
-				try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
-					printWriter.print(Integer.toString(number));
+                    printWriter.flush();
+                }
 
-					printWriter.flush();
-				}
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			System.out.println("Não foi possível criar o arquivo!");
-		}
-	}
-
-	private void readFileData() {
-		try {
-			BufferedReader bufferedReader;
-			
-			try (FileReader fileReader = new FileReader(file)) {
-				bufferedReader = new BufferedReader(fileReader);
-				lastNumber = Integer.parseInt(bufferedReader.readLine());
-			}
-
-			bufferedReader.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void updateFileData(int number) {
-		file.delete();
-
-		creatFileData(number);
-	}
-
-	public void setLastNumber(int number) {
-		updateFileData(number);
-	}
-
-	public int getLastNumber() {
-		return lastNumber;
-	}
+        } else {
+            System.out.println("Não foi possível criar o arquivo!");
+        }
+    }
 }
