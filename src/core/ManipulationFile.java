@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
-import java.util.ArrayList;
 
 /**
  *
@@ -19,67 +18,39 @@ public class ManipulationFile {
 
     private final java.io.File file = new java.io.File("data.txt");
 
-    public void generateFork(int order) {
+    public void generateFork(int order) throws IOException {
         Random random = new Random();
         String line = "";
 
-        boolean statusFile = false;
-        
+        boolean statusFile;
+
         file.delete();
 
-        try {
-            statusFile = file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        statusFile = file.createNewFile();
 
         if (statusFile) {
-            try {
-                FileWriter fileWriter = new FileWriter(file, false);
+            FileWriter fileWriter = new FileWriter(file, false);
 
-                try ( PrintWriter printWriter = new PrintWriter(fileWriter)) {
-                    int k = 0, s = 0, t = 0;
-                    char c = 'a', d = 'a', e = 'a';
-                    
-                    while (k < order){
-                        s = 0;
-                        while(k < order && s < 26){
-                            t = 0;
-                            while(k < order && t < 26){
-                                line = Character.toString(Character.toUpperCase(c)) + Character.toString(Character.toUpperCase(d)) +  Character.toString(Character.toUpperCase(e)) + " ";
-                                System.out.println(line);
-                                
-                                t++;
-                                e++;
-                                k++;
-                            }
-                            d++;
-                            k++;
-                            s++;
-                            e = 'a';
-                        }
-                        c++;
-                        d = 'a';
-                        k++;
-                    }
-
-                    for (int i = 0; i < order; i++) {
-                        line = "";
-                        for (int j = 0; j < order; j++) {
-                            if (random.nextBoolean()) {
-                                line += Integer.toString(random.nextInt(1, 10)) + " ";
-                            } else {
-                                line += "0 ";
-                            }
-                        }
-                        printWriter.print(line + "\n");
-                    }
-
-                    printWriter.flush();
+            try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
+                for (int i = 1; i <= order; i++) {
+                    line += "V" + Integer.toString(i) + " ";
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                printWriter.print(line + "\n");
+
+                for (int i = 0; i < order; i++) {
+                    line = "";
+                    for (int j = 0; j < order; j++) {
+                        if (random.nextBoolean() && i != j) {
+                            line += Integer.toString(random.nextInt(10)) + " ";
+                        } else {
+                            line += "0 ";
+                        }
+                    }
+                    printWriter.print(line + "\n");
+                }
+
+                printWriter.flush();
             }
 
         } else {

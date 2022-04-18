@@ -18,11 +18,24 @@ public class Grafo {
      */
     public static void main(String[] args) {
         Grafo1 g = new Grafo1();
-        Queue<String> G = new LinkedList<>();
         ManipulationFile file = new ManipulationFile();
-        file.generateFork(1000);
+        file.generateFork(100);
+        
+        g.load("data.txt");
+        g.mostraGrafo1(g.wg, "Grafo de Entrada");
+        
+        long tempInitDijkstra = System.currentTimeMillis();
+        g.dijkstra(g.wg, "V1");
+        long tempDijkstra = System.currentTimeMillis() - tempInitDijkstra;
 
-
+        System.out.println("o metodo Dijkstra executou em " + Long.toString(System.currentTimeMillis() - tempInitDijkstra));
+        
+        long tempInitBellmanford = System.currentTimeMillis();
+        g.menorCaminhoorigemUnica(g.wg, "V1"); // bellman_ford
+        long tempBellmanford = System.currentTimeMillis() - tempInitBellmanford;
+        
+        System.out.printf("O metodo Bellman Ford executou em: %d milisegundos\n", tempDijkstra);
+        System.out.printf("O metodo Dijkstra executou em: %d milisegundos\n", tempBellmanford);
 
 //        G.add("g1.txt");
 //        G.add("g2.txt");
