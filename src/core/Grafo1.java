@@ -30,7 +30,8 @@ public class Grafo1 {
 
     public final int inf = 999999;
     int tempo;
-
+    int bellman_arest = 0;
+    int dijkstra_arest = 0;
     public DirectedSparseMultigraph<String, EdgeType> getWg() {
         return wg;
     }
@@ -197,8 +198,8 @@ public class Grafo1 {
     }
 
     public void printVData(VData vd) {
-        System.out.println("cor pred td tt");
-        System.out.println(vd.cor + "    " + vd.pred + "   " + vd.td + "   " + vd.tt);
+//        System.out.println("cor pred td tt");
+//        System.out.println(vd.cor + "    " + vd.pred + "   " + vd.td + "   " + vd.tt);
     }
 
     public void DFS(DirectedGraph<String, EdgeType> g) {
@@ -430,13 +431,18 @@ public class Grafo1 {
         }
 
         for (String u : g.getVertices()) {
+
             String v = dVertices.get(u).pred;
             if (v != null) {
+                bellman_arest++;
 
                 EdgeType e = new EdgeType(this.wg.findEdge(v, u).weight, String.valueOf(gMC.getEdgeCount()));
                 gMC.addEdge(e, v, u);
             }
         }
+
+        System.out.printf("Arestas Bellman_ford: %d\n", bellman_arest);
+
 
         this.mostraGrafo1(gMC, "Resultado Belman-Ford");
 
@@ -506,6 +512,7 @@ public class Grafo1 {
                 }
             }
         }
+        
         return false;
     }
 
@@ -545,11 +552,13 @@ public class Grafo1 {
         for (String u : g.getVertices()) {
             String v = dVertices.get(u).pred;
             if (v != null) {
-
+                dijkstra_arest++;
                 EdgeType e = new EdgeType(this.wg.findEdge(v, u).weight, String.valueOf(gMC.getEdgeCount()));
                 gMC.addEdge(e, v, u);
             }
         }
+
+        System.out.printf("Arestas Dijkstra: %d\n", dijkstra_arest);
 
         this.mostraGrafo1(gMC, "Resultado Dijkstra");
     }

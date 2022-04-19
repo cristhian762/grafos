@@ -21,7 +21,8 @@ public class ManipulationFile {
     public void generateFork(int order) throws IOException {
         Random random = new Random();
         String line = "";
-
+        int value = 0, qtd_vert = 0;
+        
         boolean statusFile;
 
         file.delete();
@@ -41,8 +42,10 @@ public class ManipulationFile {
                 for (int i = 0; i < order; i++) {
                     line = "";
                     for (int j = 0; j < order; j++) {
-                        if (random.nextBoolean() && i != j) {
-                            line += Integer.toString(random.nextInt(10)) + " ";
+                        value = random.nextInt(10);
+                        if (random.nextInt(100) > 80 && i != j && value > 0) {
+                            line += Integer.toString(value) + " ";
+                            qtd_vert++;
                         } else {
                             line += "0 ";
                         }
@@ -51,6 +54,8 @@ public class ManipulationFile {
                 }
 
                 printWriter.flush();
+                System.out.printf("Grafo gerado com %d vertices.\n", order);
+                System.out.printf("Grafo gerado com %d arestas.\n", qtd_vert);
             }
 
         } else {
