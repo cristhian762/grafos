@@ -13,29 +13,37 @@ import java.io.IOException;
  */
 public class Grafo {
 
-	/**
-	 * @param args the command line arguments
-	 * @throws java.io.IOException
-	 *
-	 */
-	public static void main(String[] args) throws IOException {
-		Grafo1 g = new Grafo1();
-		ManipulationFile file = new ManipulationFile();
+    /**
+     * @param args the command line arguments
+     * @throws java.io.IOException
+     *
+     */
+    public static void main(String[] args) throws IOException {
+        Grafo2 g = new Grafo2();
+        g.load("g4.txt");
+        g.mostraGrafo1(g.wg, "Grafo não direcionado");
+//        g.prim(g.wg, "A");
+        g.kruskal(g.wg);
+    }
 
-		file.generateFork(100);
+    public static void tarefa1() throws IOException {
+        Grafo1 g = new Grafo1();
+        ManipulationFile file = new ManipulationFile();
 
-		g.load("data.txt");
-		g.mostraGrafo1(g.wg, "Grafo de Entrada");
+        file.generateFork(100);
 
-		long tempInitDijkstra = System.currentTimeMillis();
-		g.dijkstra(g.wg, "V1");
-		long tempDijkstra = System.currentTimeMillis() - tempInitDijkstra;
+        g.load("data.txt");
+        g.mostraGrafo1(g.wg, "Grafo de Entrada");
 
-		long tempInitBellmanford = System.currentTimeMillis();
-		g.menorCaminhoorigemUnica(g.wg, "V1"); // bellman_ford
-		long tempBellmanford = System.currentTimeMillis() - tempInitBellmanford;
+        long tempInitDijkstra = System.currentTimeMillis();
+        g.dijkstra(g.wg, "V1");
+        long tempDijkstra = System.currentTimeMillis() - tempInitDijkstra;
 
-		System.out.printf("O metodo Bellman Ford executou em: %d milisegundos\n", tempDijkstra);
-		System.out.printf("O metodo Dijkstra executou em: %d milisegundos\n", tempBellmanford);
-	}
+        long tempInitBellmanford = System.currentTimeMillis();
+        g.menorCaminhoorigemUnica(g.wg, "V1"); // bellman_ford
+        long tempBellmanford = System.currentTimeMillis() - tempInitBellmanford;
+
+        System.out.printf("O metodo Bellman Ford executou em: %d milisegundos\n", tempDijkstra);
+        System.out.printf("O metodo Dijkstra executou em: %d milisegundos\n", tempBellmanford);
+    }
 }
