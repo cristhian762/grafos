@@ -20,7 +20,7 @@ public class Grafo {
      */
     public static void main(String[] args) throws IOException {
         Grafo2 g = new Grafo2();
-        g.load("g4.txt");
+        g.load("g4.2.txt");
         g.mostraGrafo1(g.wg, "Grafo não direcionado");
 //        g.prim(g.wg, "A");
         g.kruskal(g.wg);

@@ -1,31 +1,43 @@
 package core;
 
-public class EdgeKruskal {
-    public String init;
-    public String end;
-    public float weight;
+public class EdgeKruskal implements Comparable<EdgeKruskal> {
 
-    public void setInit(String init) {
-        this.init = init;
-    }
+	public String init;
+	public String end;
+	public float weight;
 
-    public String getInit() {
-        return init;
-    }
+	public void setInit(String init) {
+		this.init = init;
+	}
 
-    public void setEnd(String end) {
-        this.end = end;
-    }
+	public String getInit() {
+		return init;
+	}
 
-    public String getEnd() {
-        return end;
-    }
+	public void setEnd(String end) {
+		this.end = end;
+	}
 
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
+	public String getEnd() {
+		return end;
+	}
 
-    public float getWeight() {
-        return weight;
-    }
+	public void setWeight(float weight) {
+		this.weight = weight;
+	}
+
+	public float getWeight() {
+		return weight;
+	}
+
+	@Override
+	public int compareTo(EdgeKruskal outherEdgeKruskal) {
+		if (this.weight < outherEdgeKruskal.getWeight()) {
+			return -1;
+		}
+		if (this.weight > outherEdgeKruskal.getWeight()) {
+			return 1;
+		}
+		return 0;
+	}
 }
