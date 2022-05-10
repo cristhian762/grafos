@@ -19,10 +19,18 @@ public class Grafo {
      *
      */
     public static void main(String[] args) throws IOException {
+        Grafo1 g = new Grafo1();
+        g.load("g6.txt");
+        g.mostraGrafo1(g.wg, "Grafo direcionado");
+        
+        g.tsp(g.wg, "A");
+    }
+    
+     public static void tarefa2() throws IOException {
         Grafo2 g = new Grafo2();
-        g.load("g4.2.txt");
+        g.load("g6.2.txt");
         g.mostraGrafo1(g.wg, "Grafo não direcionado");
-//        g.prim(g.wg, "A");
+        g.prim(g.wg, "A");
         g.kruskal(g.wg);
     }
 

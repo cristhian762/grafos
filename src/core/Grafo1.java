@@ -562,6 +562,59 @@ public class Grafo1 {
 
         this.mostraGrafo1(gMC, "Resultado Dijkstra");
     }
+    
+    public void tsp(DirectedGraph<String, EdgeType> g, String s){
+        HashMap<String, VData> dVertices = new HashMap<>();
+
+        int nVisitas = 1;
+        float custo = 0, menorCusto = this.inf;
+        
+        List<String> menorRota = new LinkedList<>();
+        List<String> rota = new LinkedList<>();
+        
+        for (String u : g.getVertices()) {
+            VData vd = new VData();
+            vd.cor = 0; // 0 é branco
+            vd.pred = null;
+            dVertices.put(u, vd);
+        }
+        
+        visitaTsp(g, dVertices, nVisitas, custo, menorCusto, menorRota, rota, s);
+        
+    }
+    
+    public void visitaTsp(DirectedGraph<String, EdgeType> g, HashMap<String, VData> dVertices, int nVisitas, float custo, float menorCusto, List<String> menorRota, List<String> rota, String u){
+        dVertices.get(u).cor = 1;
+        rota.add(u);
+        
+        for(String v : g.getNeighbors(u)){
+            if(dVertices.get(v).cor == 0){
+                nVisitas++;
+                custo++;
+                dVertices.get(v).pred = u;
+                
+                visitaTsp(g, dVertices, nVisitas, custo, menorCusto, menorRota, rota, v);
+            }
+        }
+
+        System.out.println(rota);
+        
+        dVertices.get(u).cor = 0;
+        if(nVisitas == g.getVertexCount()){
+            custo += g.findEdge(u, rota.get(rota.size() - 1)).weight;
+            
+            if(custo < menorCusto){
+                menorCusto = custo;
+                menorRota = rota;
+            }
+            custo -= g.findEdge(u, rota.get(rota.size() - 1)).weight;
+        }
+
+        custo -= g.findEdge(dVertices.get(u).pred, u).weight;
+        
+        rota.remove(u);
+        nVisitas -= 1;
+    }
 
     public static void testaDijkstra() {
         Grafo1 g = new Grafo1();
