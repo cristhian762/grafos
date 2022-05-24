@@ -289,20 +289,19 @@ public class Grafo2 {
 
 		while (!fila.isEmpty()) {
 			String u = fila.remove();
-			if(visita( (UndirectedSparseMultigraph<String, EdgeType>) h, u, dVertices, visitados, encontrados, fila, destiny)){
+			if (visita((UndirectedSparseMultigraph<String, EdgeType>) h, u, dVertices, visitados, encontrados, fila, destiny)) {
 				return true;
 			}
 			visitados.add(dVertices.get(u));
 		}
-		
-		
+
 		return false;
 
 	}
 
 	public boolean visita(UndirectedSparseMultigraph<String, EdgeType> h, String u, Map<String, VData> dVertices,
 		List<VData> visitados, List<VData> encontrados, Queue<String> fila, String destiny) {
-		
+
 		for (String v : h.getNeighbors(u)) {
 			VData vd = dVertices.get(v);
 			if ((!visitados.contains(vd)) && (!encontrados.contains(vd))) {
@@ -310,16 +309,15 @@ public class Grafo2 {
 				vd.pred = u;
 				encontrados.add(vd);
 				fila.add(v);
-				
-				if(v.equals(destiny)){
+
+				if (v.equals(destiny)) {
 					return true;
 				}
 			}
 		}
-		
+
 		dVertices.get(u).cor = 2;
-		
+
 		return false;
 	}
-
 }

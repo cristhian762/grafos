@@ -20,6 +20,56 @@ import java.util.Random;
 public class ManipulationFile {
 
 	private final java.io.File file = new java.io.File("data.txt");
+	
+	public void generateCompFork(int order) throws IOException {
+		Random random = new Random();
+		String line = "";
+		int value = 0, qtd_vert = 0;
+
+		boolean statusFile;
+
+		file.delete();
+
+		statusFile = file.createNewFile();
+
+		if (statusFile) {
+			FileWriter fileWriter = new FileWriter(file, false);
+
+			try ( PrintWriter printWriter = new PrintWriter(fileWriter)) {
+				for (int i = 1; i <= order; i++) {
+					line += "V" + Integer.toString(i) + " ";
+				}
+
+				printWriter.print(line + "\n");
+
+				for (int i = 0; i < order; i++) {
+					line = "";
+					for (int j = 0; j < order; j++) {
+						value = random.nextInt(10);
+						
+						if(value == 0){
+							value = 1;
+						}
+						
+						if (i != j) {
+							line += Integer.toString(value) + " ";
+							qtd_vert++;
+						} else {
+							line += "0 ";
+						}
+					}
+					printWriter.print(line + "\n");
+				}
+
+				printWriter.flush();
+				System.out.printf("Grafo gerado com %d vertices.\n", order);
+				System.out.printf("Grafo gerado com %d arestas.\n", qtd_vert);
+			}
+
+		} else {
+			System.out.println("Não foi possível criar o arquivo!");
+		}
+	}
 
 	public void generateFork(int order) throws IOException {
 		Random random = new Random();
